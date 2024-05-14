@@ -12,111 +12,139 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String searchText = '';
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       Provider.of<TodoProvider>(context, listen: false).getAllTodos();
     });
-    // Provider.of<TodoProvider>(context, listen: false).getAllTodos();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Provider API'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {
+                print("Tap notification");
+              },
+            ),
+          ),
+        ],
       ),
-      body: Consumer<TodoProvider>(
-        builder: (context, todoProvider, child) {
-          if (todoProvider.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final todos = todoProvider.todos;
-          return ListView.builder(
-            itemCount: todoProvider.todos.length,
-            itemBuilder: (context, index) {
-              final todo = todoProvider.todos[index];
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: todo.completed ? Color.fromARGB(255, 27, 126, 255) : Color.fromARGB(255, 0, 42, 255),
-                  child: Text(todo.id.toString()),
-                ),
-                title: Text(
-                  todo.title,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  'Daily News',
                   style: TextStyle(
-                    color: todo.completed ? Colors.grey : Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'YourUniqueFont',
+                    // Example unique font: 'Pacifico'
                   ),
                 ),
-                subtitle: Text(todo.abstract),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todo: todo)));
-                
-                }
-              );
-            },
-          );
-        },
+              ),
+              SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Colors.grey[400]),
+                            hintText: 'Search',
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              searchText = value;
+                            });
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          // Perform search action
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'For You',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Consumer<TodoProvider>(
+                builder: (context, todoProvider, child) {
+                  if (todoProvider.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final todos = todoProvider.todos.where((todo) => todo.title.toLowerCase().contains(searchText.toLowerCase())).toList();
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: todos.length,
+                    itemBuilder: (context, index) {
+                      final todo = todos[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[200],
+                        ),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: todo.completed ? Color.fromARGB(255, 27, 126, 255) : Color.fromARGB(255, 0, 42, 255),
+                            child: Text(todo.id.toString()),
+                          ),
+                          title: Text(
+                            todo.title,
+                            style: TextStyle(
+                              color: todo.completed ? Colors.grey : Colors.black,
+                            ),
+                          ),
+                          subtitle: Text(todo.abstract),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todo: todo)));
+                          
+                          }
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:tp3/provider/todo_provider.dart';
-
-// class HomePage extends StatefulWidget {
-//   const HomePage({Key? key}) : super(key: key);
-
-//   @override
-//   State<HomePage> createState() => _HomePageState();
-// }
-
-// class _HomePageState extends State<HomePage> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-//       Provider.of<TodoProvider>(context, listen: false).getAllTodos();
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Provider API'),
-//       ),
-//       body: Consumer<TodoProvider>(
-//         builder: (context, todoProvider, child) {
-//           if (todoProvider.isLoading) {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//           final todos = todoProvider.todos;
-//           return ListView.builder(
-//             itemCount: todos.length,
-//             itemBuilder: (context, index) {
-//               final todo = todos[index];
-//               return ListTile(
-//                 leading: CircleAvatar(
-//                   backgroundColor: todo.completed ? Color.fromARGB(255, 27, 126, 255) : Color.fromARGB(255, 0, 42, 255),
-//                   child: Text(todo.id.toString()),
-//                 ),
-//                 title: Text(
-//                   todo.title,
-//                   style: TextStyle(
-//                     color: todo.completed ? Colors.grey : Colors.black,
-//                   ),
-//                 ),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
