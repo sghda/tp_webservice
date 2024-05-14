@@ -18,32 +18,3 @@ class TodoProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:tp3/model/todo.dart';
-// import 'package:tp3/services/todo_service.dart';
-
-// class TodoProvider with ChangeNotifier {
-//   final TodoService todoService;
-//   List<Todo> _todos = [];
-//   bool _isLoading = false;
-
-//   TodoProvider({required this.todoService});
-
-//   List<Todo> get todos => _todos;
-//   bool get isLoading => _isLoading;
-
-//   Future<void> getAllTodos() async {
-//     _isLoading = true;
-//     notifyListeners();
-//     try {
-//       _todos = await todoService.getAllTodos();
-//     } catch (error) {
-//       throw error;
-//     } finally {
-//       _isLoading = false;
-//       notifyListeners();
-//     }
-//   }
-// }
-

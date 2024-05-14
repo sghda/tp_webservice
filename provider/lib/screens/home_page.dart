@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tp3/provider/todo_provider.dart';
 import 'package:tp3/services/todo_service.dart';
 import 'package:tp3/screens/detail_page.dart';
+// import 'package:flutter_html/flutter_html.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -120,10 +121,11 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.grey[200],
                         ),
                         child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: todo.completed ? Color.fromARGB(255, 27, 126, 255) : Color.fromARGB(255, 0, 42, 255),
-                            child: Text(todo.id.toString()),
-                          ),
+                          leading: 
+                            Icon(
+                              Icons.newspaper,
+                              color: todo.completed ? Colors.grey : Colors.black,
+                            ),
                           title: Text(
                             todo.title,
                             style: TextStyle(
@@ -132,6 +134,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           subtitle: Text(todo.abstract),
                           onTap: (){
+                            
                             Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todo: todo)));
                           
                           }

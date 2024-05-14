@@ -10,9 +10,9 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' Detail'),
+        title: Text('Detail'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +26,7 @@ class DetailPage extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  'Title: ${todo.title}',
+                  '${todo.title}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -41,15 +41,6 @@ class DetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'User ID: ${todo.userId}',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Completed: ${todo.completed ? 'Yes' : 'No'}',
-                    style: TextStyle(fontSize: 18),
-                  ),
                   SizedBox(height: 10),
                   Text(
                     'Abstract: ${todo.abstract}',
@@ -57,7 +48,7 @@ class DetailPage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Content: ${todo.content}',
+                    '${todo.content}',
                     style: TextStyle(fontSize: 18),
                   ),
                 ],
